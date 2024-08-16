@@ -56,7 +56,7 @@ jobs:
 #Adding DAST in below the application (so it runs after deployment)
 #Building and deploying a docker
   dast:
-    needs: [test, sonarqube]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
