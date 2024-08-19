@@ -27,7 +27,7 @@ jobs:
           path: junit/test-results.xml
   sonarqube:
     needs: test
-    if: true 
+    if: false
     #Put IF back to true if running SAST. False stops it to speed up process and thus DAST.
     runs-on: ubuntu-latest
     steps:
