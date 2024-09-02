@@ -210,8 +210,9 @@ jobs:
           path: ${{github.workspace}}
       - name: Upload reports
         env:
-          SUBMIT_USER: ${{ secrets.SUBMIT_USER }}
-          SUBMIT_PASS: ${{ secrets.SUBMIT_PASS }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          AZURE_ACCESS_TOKEN: ${{ steps.token-gen.outputs.azureAccessToken }}
+          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs
         run: |
           WEEK1_CONTAINER=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$DOCKERHUB_USERNAME/devops-labs" https://devsecops-ver.azurewebsites.net/api/week1-container)
           echo "Week1 container upload: $WEEK1_CONTAINER"
@@ -223,6 +224,9 @@ jobs:
   
           IMAGE_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/results.json https://devsecops-ver.azurewebsites.net/api/week4-image-report)
           echo "Image report upload: $IMAGE_RESPONSE"
+
+          WEEK5_RESPONSE=$(curl -X POST  -H "Authorization: Bearer $AZURE_ACCESS_TOKEN"  -d "$IMAGE" https://devsecops-ver.azurewebsites.net/api/week5-report)
+          echo "Week5 report upload: $WEEK5_RESPONSE"        
   image-scan:
     needs: test
     if: true
